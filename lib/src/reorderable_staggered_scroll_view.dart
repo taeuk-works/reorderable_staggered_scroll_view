@@ -256,6 +256,12 @@ class ReorderableStaggeredScrollView extends StatefulWidget {
   /// The axis direction of the grid, if applicable.
   final AxisDirection? axisDirection;
 
+  /// 그리드 아이템 간 main axis 방향 간격
+  final double mainAxisSpacing;
+
+  /// 그리드 아이템 간 cross axis 방향 간격
+  final double crossAxisSpacing;
+
   /// Constructor for creating a ReorderableStaggeredScrollView in a list layout.
   const ReorderableStaggeredScrollView.list({
     super.key,
@@ -293,7 +299,9 @@ class ReorderableStaggeredScrollView extends StatefulWidget {
     this.isNotDragList,
   })  : axisDirection = null,
         isList = true,
-        crossAxisCount = 1;
+        crossAxisCount = 1,
+        mainAxisSpacing = 0,
+        crossAxisSpacing = 0;
 
   ReorderableStaggeredScrollView.grid({
     super.key,
@@ -345,6 +353,8 @@ class ReorderableStaggeredScrollView extends StatefulWidget {
     this.edgeScrollSpeedMilliseconds = 100,
     List<ReorderableStaggeredScrollViewGridItem>? this.isNotDragList,
     this.shrinkWrap = false,
+    this.mainAxisSpacing = 0,
+    this.crossAxisSpacing = 0,
   })  : isList = false,
         buildFeedback = (buildFeedback == null
             ? null
@@ -557,6 +567,8 @@ class _ReorderableStaggeredScrollViewState
                   return StaggeredGrid.count(
                     crossAxisCount: widget.crossAxisCount,
                     axisDirection: widget.axisDirection,
+                    mainAxisSpacing: widget.mainAxisSpacing,
+                    crossAxisSpacing: widget.crossAxisSpacing,
                     children: children,
                   );
                 },

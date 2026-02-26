@@ -128,16 +128,30 @@ class _DragContainerState<T extends ReorderableStaggeredScrollViewListItem>
     _timer?.cancel();
   }
 
+  /// 드래그 시작/종료 상태를 설정한다.
+  ///
+  /// 드래그 종료 시 setState를 post-frame 콜백으로 지연하여,
+  /// SliverLayoutBuilder.performLayout 중 render mutation 에러를 방지한다.
+  /// [isDragStart] true이면 드래그 시작, false이면 드래그 종료
   void setDragStart({bool isDragStart = true}) {
     if (this.isDragStart != isDragStart) {
-      setState(() {
-        this.isDragStart = isDragStart;
-        if (!this.isDragStart) {
-          dragData = null;
-        } else {
+      if (isDragStart) {
+        // 드래그 시작: 즉시 반영 (드래그 타겟 표시)
+        setState(() {
+          this.isDragStart = true;
           endWillAccept();
-        }
-      });
+        });
+      } else {
+        // 드래그 종료: post-frame으로 지연 (layout 중 mutation 방지)
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              this.isDragStart = false;
+              dragData = null;
+            });
+          }
+        });
+      }
     }
   }
 
