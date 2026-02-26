@@ -115,6 +115,32 @@ class ReorderableStaggeredScrollViewGridExtentItem
   double get mainAxisSize => mainAxisExtent;
 }
 
+/// 콘텐츠 기반 동적 높이를 가진 그리드 아이템
+///
+/// mainAxisExtent 없이 자식 위젯의 실제 크기로 높이가 결정된다.
+/// [crossAxisCellCount]: cross axis 방향 셀 수
+class ReorderableStaggeredScrollViewGridFitItem
+    extends ReorderableStaggeredScrollViewGridItem {
+  final int crossAxisCellCount;
+
+  /// Creates a [ReorderableStaggeredScrollViewGridFitItem].
+  ///
+  /// The [key] is a required unique identifier for the item.
+  /// The [crossAxisCellCount] specifies the number of cells along the cross axis.
+  /// The [widget] is the widget content of the item.
+  const ReorderableStaggeredScrollViewGridFitItem({
+    required super.key,
+    required this.crossAxisCellCount,
+    required super.widget,
+  });
+
+  @override
+  int get crossAxisSize => crossAxisCellCount;
+
+  @override
+  num get mainAxisSize => 0; // fit 모드에서는 사용되지 않음
+}
+
 /// A scrollable list or grid with reordering and drag-and-drop support.
 class ReorderableStaggeredScrollView extends StatefulWidget {
   /// Whether the reordering and dragging functionality is enabled.
@@ -471,10 +497,16 @@ class _ReorderableStaggeredScrollViewState
             crossAxisCellCount: element.crossAxisCellCount,
             child: draggableWidget(element.widget),
           );
+        } else if (element is ReorderableStaggeredScrollViewGridFitItem) {
+          return StaggeredGridTile.fit(
+            key: ValueKey(element.key.toString()),
+            crossAxisCellCount: element.crossAxisCellCount,
+            child: draggableWidget(element.widget),
+          );
         } else {
           throw (
             FlutterError(
-              "Item should be one of ReorderableStaggeredScrollViewGridItem or ReorderableStaggeredScrollViewGridExtentItem but it was ${element.runtimeType}",
+              "Item should be one of ReorderableStaggeredScrollViewGridCountItem, ReorderableStaggeredScrollViewGridExtentItem, or ReorderableStaggeredScrollViewGridFitItem but it was ${element.runtimeType}",
             ),
           );
         }
