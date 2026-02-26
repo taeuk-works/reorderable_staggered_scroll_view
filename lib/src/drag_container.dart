@@ -247,6 +247,10 @@ class _DragContainerState<T extends ReorderableStaggeredScrollViewListItem>
     return DragItem(
         child: Stack(
           children: <Widget>[
+            // Opacity로 드래그 중인 아이템을 숨긴다.
+            // Visibility는 render object를 제거/추가하여 markNeedsLayout을 발생시키므로
+            // LayoutBuilder.performLayout 중 render mutation 에러를 유발한다.
+            // Opacity는 paint만 변경하므로 layout mutation이 발생하지 않는다.
             if (isDragStart &&
                 dragData == data &&
                 widget.draggingWidgetOpacity > 0)
@@ -256,9 +260,8 @@ class _DragContainerState<T extends ReorderableStaggeredScrollViewListItem>
                 child: keyWidget,
               )
             else
-              Visibility(
-                maintainState: true,
-                visible: dragData != data,
+              Opacity(
+                opacity: dragData != data ? 1.0 : 0.0,
                 child: keyWidget,
               ),
             if (isDragStart && !isContains(data))
