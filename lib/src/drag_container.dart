@@ -265,62 +265,62 @@ class _DragContainerState<T extends ReorderableStaggeredScrollViewListItem>
                 child: keyWidget,
               ),
             if (isDragStart && !isContains(data))
-              Flex(
-                direction: widget.scrollDirection,
-                children: <Widget>[
-                  getSizedBox(
-                    data,
-                    DragTarget<T>(
-                        onWillAcceptWithDetails:
-                            (DragTargetDetails<T> details) {
-                          setWillAccept(details.data, data);
-                          return true;
-                        },
-                        onAcceptWithDetails: widget.onAccept == null
-                            ? null
-                            : (DragTargetDetails<T> details) =>
-                                widget.onAccept?.call(details.data, data, true),
-                        onLeave: widget.onLeave == null
-                            ? null
-                            : (T? moveData) =>
-                                widget.onLeave?.call(moveData, data, true),
-                        onMove: widget.onMove == null
-                            ? null
-                            : (DragTargetDetails<T> details) =>
-                                widget.onMove?.call(data, details, true),
-                        hitTestBehavior: widget.hitTestBehavior,
-                        builder: (BuildContext context, List<T?> candidateData,
-                            List<dynamic> rejectedData) {
-                          return Container(color: Colors.transparent);
-                        }),
-                  ),
-                  getSizedBox(
-                    data,
-                    DragTarget<T>(
-                        onWillAcceptWithDetails:
-                            (DragTargetDetails<T> details) {
-                          setWillAccept(details.data, data, isFront: false);
-                          return true;
-                        },
-                        onAcceptWithDetails: widget.onAccept == null
-                            ? null
-                            : (DragTargetDetails<T> details) => widget.onAccept
-                                ?.call(details.data, data, false),
-                        onLeave: widget.onLeave == null
-                            ? null
-                            : (T? moveData) =>
-                                widget.onLeave?.call(moveData, data, false),
-                        onMove: widget.onMove == null
-                            ? null
-                            : (DragTargetDetails<T> details) =>
-                                widget.onMove?.call(data, details, false),
-                        hitTestBehavior: widget.hitTestBehavior,
-                        builder: (BuildContext context, List<T?> candidateData,
-                            List<dynamic> rejectedData) {
-                          return Container(color: Colors.transparent);
-                        }),
-                  ),
-                ],
+              Positioned.fill(
+                child: Flex(
+                  direction: widget.scrollDirection,
+                  children: <Widget>[
+                    Expanded(
+                      child: DragTarget<T>(
+                          onWillAcceptWithDetails:
+                              (DragTargetDetails<T> details) {
+                            setWillAccept(details.data, data);
+                            return true;
+                          },
+                          onAcceptWithDetails: widget.onAccept == null
+                              ? null
+                              : (DragTargetDetails<T> details) =>
+                                  widget.onAccept?.call(details.data, data, true),
+                          onLeave: widget.onLeave == null
+                              ? null
+                              : (T? moveData) =>
+                                  widget.onLeave?.call(moveData, data, true),
+                          onMove: widget.onMove == null
+                              ? null
+                              : (DragTargetDetails<T> details) =>
+                                  widget.onMove?.call(data, details, true),
+                          hitTestBehavior: widget.hitTestBehavior,
+                          builder: (BuildContext context, List<T?> candidateData,
+                              List<dynamic> rejectedData) {
+                            return Container(color: Colors.transparent);
+                          }),
+                    ),
+                    Expanded(
+                      child: DragTarget<T>(
+                          onWillAcceptWithDetails:
+                              (DragTargetDetails<T> details) {
+                            setWillAccept(details.data, data, isFront: false);
+                            return true;
+                          },
+                          onAcceptWithDetails: widget.onAccept == null
+                              ? null
+                              : (DragTargetDetails<T> details) => widget.onAccept
+                                  ?.call(details.data, data, false),
+                          onLeave: widget.onLeave == null
+                              ? null
+                              : (T? moveData) =>
+                                  widget.onLeave?.call(moveData, data, false),
+                          onMove: widget.onMove == null
+                              ? null
+                              : (DragTargetDetails<T> details) =>
+                                  widget.onMove?.call(data, details, false),
+                          hitTestBehavior: widget.hitTestBehavior,
+                          builder: (BuildContext context, List<T?> candidateData,
+                              List<dynamic> rejectedData) {
+                            return Container(color: Colors.transparent);
+                          }),
+                    ),
+                  ],
+                ),
               ),
           ],
         ),
