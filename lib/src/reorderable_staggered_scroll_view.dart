@@ -344,8 +344,8 @@ class ReorderableStaggeredScrollView extends StatefulWidget {
     this.edgeScroll = 0.1,
     this.edgeScrollSpeedMilliseconds = 100,
     List<ReorderableStaggeredScrollViewGridItem>? this.isNotDragList,
+    this.shrinkWrap = false,
   })  : isList = false,
-        shrinkWrap = false,
         buildFeedback = (buildFeedback == null
             ? null
             : (ReorderableStaggeredScrollViewListItem item, Widget widget,
